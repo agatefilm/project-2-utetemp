@@ -27,13 +27,20 @@ for name, path in FILES.items():
     data[name] = df
 
 value_columns = COLUMNS[1:]
+
+START = 3600
+END = 5900
+
+for name, df in data.items():
+    data[name] = df[(df["index"] >= START) & (df["index"] <= END)].reset_index(drop=True)
+
 x = data["Landvetter"]["index"]
 
 for col in value_columns:
     fig, ax = plt.subplots(figsize=(12, 5))
     ax.plot(x, data["Landvetter"][col], label="Landvetter", linewidth=0.8)
     ax.plot(x, data["VGA26"][col], label="VGA26", linewidth=0.8, alpha=0.8)
-    ax.set_title(f"Jämförelse av {col} mellan Landvetter och VGA26")
+    ax.set_title(f"Jämförelse av {col} mellan Landvetter och VGA26 (index {START}–{END})")
     ax.set_xlabel("index")
     ax.set_ylabel(col)
     ax.legend()
